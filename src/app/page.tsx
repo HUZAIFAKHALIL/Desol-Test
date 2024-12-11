@@ -1,101 +1,116 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { TextField, Button, Typography, Box } from "@mui/material";
+import { login } from "@/api/loginApi";  // Make sure the login function is set up correctly
+import axios, { AxiosError } from "axios";
+import {router} from "next/client";
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+interface FormValues {
+  email: string;
+  password: string;
 }
+
+const Login = () => {
+  const [isMounted, setIsMounted] = useState(false);
+  const { register, handleSubmit, formState: { errors } } = useForm<FormValues>();
+  const [isLoading, setIsLoading] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);  // To store and display error message from API
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const onSubmit = async (data: FormValues) => {
+    try {
+      setIsLoading(true);
+      const response = await login(data);
+      if (response.status) {
+        console.log("Login successful:", response.data);
+        setTimeout(() => {
+          setIsLoading(false);
+          router.push("/cars");
+        }, 4000);
+      } else {
+        setIsLoading(false);
+        setApiError("Login failed: " + response.message);
+      }
+    } catch (error) {
+      setIsLoading(false);
+      if (axios.isAxiosError(error) && error.response) {
+        console.error("Error response:", error.response.data);
+        setApiError(error.response.data?.message || "An unexpected error occurred.");
+      } else {
+        console.error("Unexpected error:", error);
+        setApiError("An unexpected error occurred.");
+      }
+    }
+  };
+
+  if (!isMounted) {
+    return null;
+  }
+
+  return (
+      <Box className="flex flex-col items-center justify-center px-6 py-8 mx-auto w-full md:h-screen bg-white">
+        <Typography variant="h4" className="mb-6 font-bold text-gray-900">Auto World</Typography>
+        <Box className="w-full max-w-md bg-gray-100 rounded-lg shadow-lg p-6">
+          <Typography variant="h5"   color="black" className="mb-5 text-gray-900" sx={{ marginBottom: 3 }}>
+            Sign in to your account
+          </Typography>
+          <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+            <div>
+              <TextField
+                  type="email"
+                  label="Your email"
+                  variant="outlined"
+                  fullWidth
+                  required
+                  {...register("email", { required: "Email is required" })}
+                  error={!!errors.email}
+                  helperText={errors.email ? errors.email.message : ""}
+                  className="mb-4"
+              />
+            </div>
+            <div>
+              <TextField
+                  label="Password"
+                  type="password"
+                  variant="outlined"
+                  fullWidth
+                  required
+                  {...register("password", {
+                    required: "Password is required",
+                    pattern: {
+                      value: /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/,
+                      message: "Password must be at least 8 characters long, include at least one special character, and be alphanumeric"
+                    }
+                  })}
+                  error={!!errors.password}
+                  helperText={errors.password ? errors.password.message : ""}
+                  className="mb-4"
+              />
+            </div>
+            {apiError && (
+                <Typography color="error" variant="body2" className="text-center mb-2">
+                  {apiError}
+                </Typography>
+            )}
+            <Button
+                disabled={isLoading}
+                type="submit"
+                variant="contained"
+                color="primary"
+                fullWidth
+                className="mt-4"
+            >
+              {isLoading ? "Signing in..." : "Sign in"}
+            </Button>
+          </form>
+        </Box>
+      </Box>
+  );
+};
+
+export default Login;
