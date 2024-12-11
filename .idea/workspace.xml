@@ -5,13 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4a32fe8f-5409-40db-a69c-71647c411a89" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/carsApi.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/carsApi.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/loginApi.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/loginApi.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/cars/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/cars/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/config/constant.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/config/constant.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,7 +87,7 @@
       <option name="presentableId" value="Default" />
       <updated>1733849304819</updated>
       <workItem from="1733849307161" duration="8603000" />
-      <workItem from="1733862402852" duration="11190000" />
+      <workItem from="1733862402852" duration="12961000" />
     </task>
     <servers />
   </component>
