@@ -20,7 +20,7 @@ import {
 } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { PhotoCamera } from '@mui/icons-material';
-import { submitCar, SubmitCarRequestBody, SubmitCarResponse } from "@/api/carsApi";
+import { submitCar, SubmitCarRequestBody } from "@/api/carsApi";
 
 interface FormValues {
     carModel: string;
@@ -50,8 +50,6 @@ const SubmitVehicle = () => {
     const [apiError, setApiError] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
-
-    const numOfPictures = watch('numOfPictures');
 
     const onSubmit = async (data: FormValues) => {
         setIsSubmitting(true);

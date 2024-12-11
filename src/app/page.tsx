@@ -3,8 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { TextField, Button, Typography, Box } from "@mui/material";
-import { login } from "@/api/loginApi";  // Make sure the login function is set up correctly
-import axios, { AxiosError } from "axios";
+import { login } from "@/api/loginApi";
 import {router} from "next/client";
 
 interface FormValues {
@@ -16,7 +15,7 @@ const Login = () => {
   const [isMounted, setIsMounted] = useState(false);
   const { register, handleSubmit, formState: { errors } } = useForm<FormValues>();
   const [isLoading, setIsLoading] = useState(false);
-  const [apiError, setApiError] = useState<string | null>(null);  // To store and display error message from API
+  const [apiError, setApiError] = useState<string | null>(null);
 
   useEffect(() => {
     setIsMounted(true);
@@ -34,11 +33,11 @@ const Login = () => {
         }, 4000);
       } else {
         setIsLoading(false);
-        setApiError("Login failed: " + response.message);
+        setApiError("Login failed: " + response);
       }
     } catch (error) {
       setIsLoading(false);
-      if (axios.isAxiosError(error) && error.response) {
+      if (error.response) {
         console.error("Error response:", error.response.data);
         setApiError(error.response.data?.message || "An unexpected error occurred.");
       } else {
